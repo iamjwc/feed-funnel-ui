@@ -1,0 +1,12 @@
+[submodule "libs/feed-funnel"]
+	path = libs/feed-funnel
+	url = git://github.com/iamjwc/feed-funnel.git
+[submodule "libs/sinatra"]
+	path = libs/sinatra
+	url = git://github.com/sinatra/sinatra.git
+[submodule "libs/haml"]
+	path = libs/haml
+	url = git://github.com/nex3/haml.git
+[submodule "libs/rack"]
+	path = libs/rack
+	url = git://github.com/chneukirchen/rack.git

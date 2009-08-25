@@ -1,5 +1,5 @@
-[submodule "libs/feed-funnel"]
-	path = libs/feed-funnel
+[submodule "libs/feed_funnel"]
+	path = libs/feed_funnel
 	url = git://github.com/iamjwc/feed-funnel.git
 [submodule "libs/sinatra"]
 	path = libs/sinatra
@@ -10,3 +10,6 @@
 [submodule "libs/rack"]
 	path = libs/rack
 	url = git://github.com/chneukirchen/rack.git
+[submodule "libs/hpricot"]
+	path = libs/hpricot
+	url = git://github.com/bitbckt/hpricot.git

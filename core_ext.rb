@@ -1,6 +1,10 @@
 class String
-  def strip_html
+  def dehtmlify
     self.gsub(/&gt;/, ">").gsub(/&lt;/, "<").gsub(/<[^>]*>/m, "").gsub(/\W+/, " ").gsub(/&[a-z]{0,4};/i, "")
+  end
+
+  def urlify
+    self.gsub(/_+/, "-").strip.gsub(/[^\w]+/, "-").gsub(/^[^\w]*|[^\w]*$/, "")
   end
 end
 

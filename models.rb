@@ -1,32 +1,27 @@
 $:.unshift File.join(File.dirname(__FILE__), "libs", "feed_funnel", "lib")
 require "feed_funnel"
+require 'hpricot'
 require 'net/http'
 require 'dm-core'
 
 DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/test.db")
 
-class String
-  def strip_html
-    self.gsub(/&gt;/, ">").gsub(/&lt;/, "<").gsub(/<[^>]*>/m, "").gsub(/\W+/, " ").gsub(/&[a-z]{0,4};/i, "")
-  end
-end
-
-class Array
-  alias :head :first
-
-  def tail
-    self[1..-1]
-  end
-end
+FIELDS = {
+  :published_date => lambda {|i| (i.h % :pubDate).inner_text },
+  :description    => lambda {|i| (i.h % :description).inner_text.strip_html },
+  :title          => lambda {|i| (i.h % :title).inner_text },
+  :enclosure_url  => lambda {|i| (i.h % :enclosure)[:url].inner_text }
+}
 
 class Funnel
   include DataMapper::Resource
  
   # The Serial type provides auto-incrementing primary keys
   property :id,         Serial
+  property :name,       String,                   :default => Proc.new {|row, name| $1.strip if row.rss =~ /<title>([^<]*)<\/title>/im }
   property :urls,       Text,     :lazy => false
   property :rss,        Text,     :lazy => false, :default => Proc.new {|row, rss| row.refresh }
-  property :created_at, DateTime, :default => Proc.new {|row, created_at| Time.now }
+  property :created_at, DateTime,                 :default => Proc.new {|row, created_at| Time.now }
 
   def urls
     (@urls || "").split
@@ -43,10 +38,11 @@ class Funnel
     end
   end
 
+  protected
+
   def refresh
     FeedFunnel::Funnel.new(self.feeds.head,
-      :matchers => [ FeedFunnel::DateProximityMatcher.new {|i| (i.h % :pubDate).inner_text } ],
-     # :matchers => [FeedFunnel::LevenshteinMatcher.new {|i| (i.h % :description).inner_text.strip_html }],
+      :matchers => [ FeedFunnel::DateProximityMatcher.new(&FIELDS[:published_date]) ],
       :feeds => self.feeds.tail
     ).GO!.to_s
   end

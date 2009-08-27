@@ -2,6 +2,7 @@ require 'rubygems'
 require 'rack'
 require 'haml'
 require 'sinatra'
+require 'core_ext'
 require 'models'
 
 get "/" do

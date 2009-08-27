@@ -18,8 +18,9 @@ end
 
 get "/generate" do
   h = {:urls => params["urls"]}
+  f = Funnel.first(h) || Funnel.create(h)
 
-  (Funnel.first(h) || Funnel.create(h)).rss
+  redirect "/#{f.id}/#{f.name}"
 end
 
 @@refreshed_at = Time.at(0)

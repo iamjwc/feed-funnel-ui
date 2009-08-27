@@ -9,7 +9,7 @@ get "/" do
   haml :index
 end
 
-get "/:id-:name" do
+get "/:id/:name" do
   f = Funnel.get(params[:id])
   raise Sinatra::NotFound if f.nil? || f.name.downcase != params[:name].downcase
 

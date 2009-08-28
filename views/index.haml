@@ -1,14 +1,20 @@
+%h1
+  Feed Funnel
+  %span.smile :)
+
+%h2 Funnel Your Feeds
 %form{:action => "/generate", :method => "get"}
   %textarea{:name => "urls"}
-  %button{:type => "submit"} Blah
+  %button{:type => "submit"} Put The 'Fun' In 'Funnel'
 
+%h2 Already Funneled Feeds
 %ul
   - @funnels.each do |f|
     %li
+      = %{<img src="#{f.img}" height="100px" width="100px" />}
       = %{<a href="/#{f.id}/#{f.name}">#{f.name}</a>}
       %ul
         - f.urls.each do |url|
           %li= url
 
-%p
-  = "Last updated at: #{last_refreshed}"
+%p= "Last updated: #{last_refreshed}"

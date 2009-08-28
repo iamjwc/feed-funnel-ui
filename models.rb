@@ -22,6 +22,13 @@ class Funnel
     $1.urlify if self.rss =~ /<title>([^<]*)<\/title>/im
   end
 
+  def img
+    # <itunes:image href="http://bitcast-a.bitgravity.com/revision3/images/shows/coop/coop.jpg" />
+    if self.rss =~ /<itunes:image ([^>]*)/im
+      $1 if $1 =~ /href=["']([^"']*)/
+    end
+  end
+
   def self.refresh
     self.all.each {|f| f.refresh }
   end

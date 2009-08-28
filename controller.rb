@@ -56,18 +56,20 @@ get "/delete/:id/:name" do
 end
 
 get "/generate" do
-  h = {:urls => params["urls"]}
-  f = Funnel.first(h) || Funnel.create(h)
-
-  if f.rss.to_s.strip.empty?
-    # Get rid of blank submissions
-    f.destroy
+  begin
+    h = {:urls => params["urls"]}
+    f = Funnel.first(h) || Funnel.create(h)
+  
+    if f.rss.to_s.strip.empty?
+      # Get rid of blank submissions
+      f.destroy
+      redirect '/'
+    else
+      redirect "/#{f.id}/#{f.name}"
+    end
+  rescue
     redirect '/'
-  else
-    redirect "/#{f.id}/#{f.name}"
   end
-rescue
-  redirect '/'
 end
 
 get "/refresh" do

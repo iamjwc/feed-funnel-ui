@@ -26,7 +26,7 @@ helpers do
   end
 
   def with_valid_feed(f, &b)
-    if f.nil? || f.name.downcase != params[:name].downcase
+    if f.nil? || f.name.to_s.downcase != params[:name].to_s.downcase
       not_found
     else
       b.call(f)
@@ -58,6 +58,9 @@ end
 get "/generate" do
   h = {:urls => params["urls"]}
   f = Funnel.first(h) || Funnel.create(h)
+
+  # Get rid of blank submissions
+  f.destroy if f.rss.to_s.strip.empty?
 
   redirect "/#{f.id}/#{f.name}"
 end

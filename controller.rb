@@ -59,10 +59,15 @@ get "/generate" do
   h = {:urls => params["urls"]}
   f = Funnel.first(h) || Funnel.create(h)
 
-  # Get rid of blank submissions
-  f.destroy if f.rss.to_s.strip.empty?
-
-  redirect "/#{f.id}/#{f.name}"
+  if f.rss.to_s.strip.empty?
+    # Get rid of blank submissions
+    f.destroy
+    redirect '/'
+  else
+    redirect "/#{f.id}/#{f.name}"
+  end
+rescue
+  redirect '/'
 end
 
 get "/refresh" do

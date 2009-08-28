@@ -30,16 +30,17 @@ class Funnel
   end
 
   def self.refresh
-    self.all.each {|f| f.refresh }
+    self.all.each do |f|
+      f.attribute_set :rss, f.refresh
+      f.save
+    end
   end
 
   def refresh
-    self.attribute_set :rss, FeedFunnel::Funnel.new(self.feeds.head,
+    FeedFunnel::Funnel.new(self.feeds.head,
       :matchers => [ FeedFunnel::DateProximityMatcher.new(&FIELDS[:published_date]) ],
       :feeds => self.feeds.tail
     ).GO!.to_s
-
-    self.save
   end
 
   def feeds

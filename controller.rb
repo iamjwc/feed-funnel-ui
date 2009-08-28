@@ -63,7 +63,7 @@ get "/generate" do
     redirect "/#{f.id}/#{f.name}"
   else
     # Get rid of blank submissions
-    f.destroy
+    f.destroy if f
     redirect '/'
   end
 end

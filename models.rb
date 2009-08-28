@@ -1,11 +1,3 @@
-$:.unshift File.join(File.dirname(__FILE__), "libs", "feed_funnel", "lib")
-require "feed_funnel"
-require 'hpricot'
-require 'net/http'
-require 'dm-core'
-
-DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/test.db")
-
 FIELDS = {
   :published_date => lambda {|i| (i.h % :pubDate).inner_text },
   :description    => lambda {|i| (i.h % :description).inner_text.dehtmlify },
@@ -26,26 +18,25 @@ class Funnel
     (@urls || "").split
   end
 
-  def feeds
-    @feeds ||= self.urls.map {|url| FeedFunnel::Feed.new fetch(url) }
-  end
-
   def name
     $1.urlify if self.rss =~ /<title>([^<]*)<\/title>/im
   end
 
   def self.refresh
-    self.all.each do |f|
-      f.attribute_set :rss, f.refresh
-      f.save
-    end
+    self.all.each {|f| f.refresh }
   end
 
   def refresh
-    FeedFunnel::Funnel.new(self.feeds.head,
+    self.attribute_set :rss, FeedFunnel::Funnel.new(self.feeds.head,
       :matchers => [ FeedFunnel::DateProximityMatcher.new(&FIELDS[:published_date]) ],
       :feeds => self.feeds.tail
     ).GO!.to_s
+
+    self.save
+  end
+
+  def feeds
+    @feeds ||= self.urls.map {|url| FeedFunnel::Feed.new fetch(url) }
   end
 
   def fetch(url)
@@ -53,4 +44,3 @@ class Funnel
   end
 end
 
-DataMapper.auto_upgrade!

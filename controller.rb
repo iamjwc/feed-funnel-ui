@@ -1,11 +1,8 @@
-require 'rubygems'
-require 'rack'
-require 'haml'
+require 'environment'
 require 'sinatra'
-require 'core_ext'
-require 'models'
 
 get "/" do
+  @funnels = Funnel.all
   haml :index
 end
 
@@ -34,5 +31,4 @@ get "/refresh" do
 
   "word"
 end
-
 

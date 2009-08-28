@@ -1,3 +1,11 @@
 %form{:action => "/generate", :method => "get"}
   %textarea{:name => "urls"}
   %button{:type => "submit"} Blah
+
+%ul
+  - @funnels.each do |f|
+    %li
+      = %{<a href="/#{f.id}/#{f.name}">#{f.name}</a>}
+      %ul
+        - f.urls.each do |url|
+          %li= url

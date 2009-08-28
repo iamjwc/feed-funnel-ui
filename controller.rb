@@ -20,7 +20,16 @@ helpers do
     if @@refreshed_at == Time.at(0)
       "Never"
     elsif
-      @@refreshed_at.to_s
+      diff = Time.now - @@refreshed_at
+      "#{(diff / 60).to_i} minutes ago"
+    end
+  end
+
+  def with_valid_feed(f, &b)
+    if f.nil? || f.name.downcase != params[:name].downcase
+      not_found
+    else
+      b.call(f)
     end
   end
 end
@@ -31,20 +40,19 @@ get "/" do
 end
 
 get "/:id/:name" do
-  f = Funnel.get(params[:id])
-  raise Sinatra::NotFound if f.nil? || f.name.downcase != params[:name].downcase
-
-  f.rss
+  with_valid_feed(Funnel.get(params[:id])) do |f|
+    content_type "application/rss+xml"
+    f.rss
+  end
 end
 
 get "/delete/:id/:name" do
   protected!
 
-  f = Funnel.get(params[:id])
-  raise Sinatra::NotFound if f.nil? || f.name.downcase != params[:name].downcase
-  f.destroy
-
-  "gone"
+  with_valid_feed(Funnel.get(params[:id])) do |f|
+    f.destroy
+    redirect '/'
+  end
 end
 
 get "/generate" do
@@ -58,11 +66,9 @@ get "/refresh" do
   if @@refreshed_at < Time.now - STALE_IN
     @@refreshed_at = Time.now
 
-    Thread.new {
-      Funnel.refresh
-    }
+    Thread.new { Funnel.refresh }
   end
 
-  "word"
+  redirect '/'
 end
 

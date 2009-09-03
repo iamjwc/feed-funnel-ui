@@ -18,7 +18,7 @@ helpers do
   STALE_IN = 60 * 60
   def last_refreshed
     if @@refreshed_at == Time.at(0)
-      "Never"
+      "not yet"
     elsif
       diff = Time.now - @@refreshed_at
       "#{(diff / 60).to_i} minutes ago"

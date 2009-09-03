@@ -17,6 +17,8 @@
 
 %p Using Media RSS and fuzzy math, Combinificator matches up episodes and loads all the formats into a single superfeed. RSS nerds can <a href="http://wiki.limewire.org/index.php?title=LimeCast_Funnel">read how it works</a>. Joe six-pack can check out the coalition of podcasts after combinification: 
 
+%p= "Updated #{last_refreshed}."
+
 %ul.images= @funnels.map { |f| '<li><a href="'+f.url.to_s+'"><img src="'+f.img+'" height="200px" width="200px" /></a></li>' }.join('')
 
 %p <a href="/">Combinificator</a> is <a href="http://wiki.limewire.org/index.php?title=LimeCast_Funnel">open source</a>, part of <a href="http://limecast.com">LimeCast</a>,<br /> and wants you to check out <a href="http://getmiro.com/">Miro</a> and <a href="http://makeinternettv.org/">Make Internet TV</a>.

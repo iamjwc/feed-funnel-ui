@@ -29,6 +29,10 @@ class Funnel
     end
   end
 
+  def url
+    $1.strip if self.rss =~ /<link>([^<]*)<\/link>/im
+  end
+
   def self.refresh
     self.all.each do |f|
       f.attribute_set :rss, f.refresh

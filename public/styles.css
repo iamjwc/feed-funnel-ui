@@ -1,69 +1,102 @@
 body {
-  background-color: #333;
-  font-family: "Comic Sans MS";
+	background-color: #E1E1E1;
+	font-family: Georgia, Georgia, serif; 
+	font-size: 14px; 
+	color: #171717; 
+	text-align: center;
 }
 
 #container {
-  width: 50%;
-  margin: 0 25%;
+	width: 60%;
+	margin: 0 20%;
 }
+
+a { color: #171717; }
+h1 a { text-decoration: none; }
 
 h1 {
-  color: #547AE7;
-  font-size: 5em;
-  text-align: center;
-
-  margin: 0;
-  padding: 0;
+	font-size: 5em;
+	text-align: center;
+	margin: 0;
+	padding: 0 0 0 85px;
 }
 
-h1 .smile {
-  color: #EAE754;
+img.gb {
+	position: absolute;
+	top: -99px;
+	left: 0px;
+	width: 100px;
+}
+
+img.funnel {
+	margin: -20px 0 0 0;
+	width: 100px;
+}
+
+h3 { 
+	margin: 0;
+	padding: 0 0 0 120px;;
+	text-align: left;
 }
 
 h2 {
-  color: #E74A54;
-  font-size: 2em;
-
-  margin-bottom: 0;
+	font-size: 2em;
+	margin-bottom: 0;
 }
 
 form {
-  text-align: right;
+	margin: 10px 0 30px 0;
 }
+
+form p {
+}
+
+div.textarea {
+	position: relative;
+	margin-bottom: 20px;
+}
+
+textarea { padding: 5px; font-size: 1.4em; }
+button { font-size: 1.2em; }
 
 textarea {
-  border: 4px solid #5AE754;
-  width: 100%;
-  height: 5em;
+	width: 100%;
+	height: 200px;
+	border: 1px inset #EEE;
 }
 
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+p { font-size: 16px; }
+
+hr { width: 100px; height: 1px; border-width: 1px 0 0 0; }
+
+div.url {
+	font-weight: bold;
+	font-size: 2em;
+	text-align: center;
+	white-space: nowrap;
 }
 
-ul li a {
-  color: #EAE754;
+div.button {
+	top: 10px;
+	position: relative;
+	width: 200px;
+	margin: 20px auto 30px auto;
+	text-align: center;
 }
 
-ul ul {
-  min-height: 130px;
+div.button img { margin: 0 auto; }
+div.button button {
+	position: absolute;
+	left: 35px;
+	bottom: 5px;
+	z-index: 1;
 }
 
-ul li img {
-  float: right;
-  border: 4px solid #5AE754;
+ul.images {
+	list-style: none;
+	margin: 20px 0 0 0;
+	padding: 0;
 }
 
-ul ul {
-  list-style-type: disc;
-  margin: 0;
-  margin-left: 50px;
-}
-
-ul ul li {
-  color: #5AE754;
-}
+ul.images li { display: inline; }
 

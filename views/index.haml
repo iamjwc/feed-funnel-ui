@@ -1,20 +1,23 @@
 %h1
-  Feed Funnel
-  %span.smile :)
+  %a{:href => "/"} Combinificator
 
-%h2 Funnel Your Feeds
+%h3 Make a podcast in multiple video formats? Have a separate feed for each format? Not after Combinificator gets involved, you don't.
+
 %form{:action => "/generate", :method => "get"}
-  %textarea{:name => "urls"}
-  %button{:type => "submit"} Put The 'Fun' In 'Funnel'
+  %div.textarea
+    %img.gb{:src => "gb.png"}
+    %textarea{:name => "urls"}
 
-%h2 Already Funneled Feeds
-%ul
-  - @funnels.each do |f|
-    %li
-      = %{<img src="#{f.img}" height="100px" width="100px" />}
-      = %{<a href="/#{f.id}/#{f.name}">#{f.name}</a>}
-      %ul
-        - f.urls.each do |url|
-          %li= url
+    %p Enter your feed addresses in Box A1 above. One URL per line, please. Press the button and the address of your new, uh, combinified feed will be promptly returned to you.
 
-%p= "Last updated: #{last_refreshed}"
+  %div.button
+    %img.funnel{:src => "funnel.png"}
+    %button{:type => "submit"} Combinificate!
+  %div.url 
+
+%p Using Media RSS and fuzzy math, Combinificator matches up episodes and loads all the formats into a single superfeed. RSS nerds can <a href="http://wiki.limewire.org/index.php?title=LimeCast_Funnel">read how it works</a>. Joe six-pack can check out the coalition of podcasts after combinification: 
+
+%ul.images= @funnels.map { |f| '<li><a href="'+f.url.to_s+'"><img src="'+f.img+'" height="200px" width="200px" /></a></li>' }.join('')
+
+%p <a href="/">Combinificator</a> is <a href="http://wiki.limewire.org/index.php?title=LimeCast_Funnel">open source</a>, part of <a href="http://limecast.com">LimeCast</a>,<br /> and wants you to check out <a href="http://getmiro.com/">Miro</a> and <a href="http://makeinternettv.org/">Make Internet TV</a>.
+

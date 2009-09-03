@@ -55,16 +55,19 @@ get "/delete/:id/:name" do
   end
 end
 
-get "/generate" do
+post "/generate" do
   h = {:urls => params["urls"]}
   f = Funnel.first(h) || (Funnel.create(h) rescue nil)
 
+  host = request.host + (":#{request.port}" if request.port)
+
   if f && !f.rss.to_s.strip.empty? && !f.name.to_s.empty?
-    redirect "/#{f.id}/#{f.name}"
+    url = "http://#{host}/#{f.id}/#{f.name}"
+    request.xhr? ? "#{url}|#{f.url}|#{f.img}" : redirect(url)
   else
     # Get rid of blank submissions
     f.destroy if f
-    redirect '/'
+    request.xhr? ? "" : redirect('/')
   end
 end
 

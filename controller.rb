@@ -38,7 +38,7 @@ helpers do
   end
   
   def host
-    request.host + (":#{request.port}" if request.port)
+    request.host + (":#{request.port}" unless request.port.blank?)
   end
   
 end

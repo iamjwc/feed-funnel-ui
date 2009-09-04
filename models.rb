@@ -10,9 +10,16 @@ class Funnel
  
   # The Serial type provides auto-incrementing primary keys
   property :id,         Serial
+  property :title,      Text,     :lazy => false
+  property :clean_url,  Text,     :lazy => false
   property :urls,       Text,     :lazy => false
   property :rss,        Text,     :lazy => false, :default => Proc.new {|row, rss| row.refresh }
   property :created_at, DateTime,                 :default => Proc.new {|row, created_at| Time.now }
+
+  before :save do
+    self.title     = name if self.title.nil?
+    self.clean_url = title if self.clean_url.nil?
+  end
 
   def urls
     (@urls || "").split
@@ -35,16 +42,16 @@ class Funnel
 
   def self.refresh
     self.all.each do |f|
-      f.attribute_set :rss, f.refresh
+      f.attribute_set :rss, f.refresh(:title => f.title)
       f.save
     end
   end
 
-  def refresh
-    FeedFunnel::Funnel.new(self.feeds.head,
-      :matchers => [ FeedFunnel::DateProximityMatcher.new(&FIELDS[:published_date]) ],
-      :feeds => self.feeds.tail
-    ).GO!.to_s
+  def refresh(opts={})
+    opts[:matchers] = [ FeedFunnel::DateProximityMatcher.new(&FIELDS[:published_date]) ]
+    opts[:feeds]    = self.feeds.tail
+    opts[:title]    ||= self.title
+    FeedFunnel::Funnel.new(self.feeds.head, opts).GO!.to_s
   end
 
   def feeds

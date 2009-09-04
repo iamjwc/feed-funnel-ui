@@ -1,0 +1,14 @@
+%h3= "Edit '#{@feed.title}'"
+
+%br
+
+%form{:action => "/update/#{@feed.id}/#{@feed.clean_url}", :method => :post}
+  %label{:for => "feed_title"}= "Title"
+  %input{:type => :text, :size => 25, :id => "feed_title", :name => "feed[title]", :value => @feed.title}
+  %br
+  %label{:for => "feed_clean_url"}= "http://#{host}/"
+  %input{:type => :text, :size => 25, :id => "feed_clean_url", :name => "feed[clean_url]", :value => @feed.clean_url}
+  %br
+  %br
+  %input{:type => :submit, :value => "Save"}
+

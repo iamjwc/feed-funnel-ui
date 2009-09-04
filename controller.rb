@@ -1,3 +1,7 @@
+# ADD WAY TO EDIT TITLES
+
+
+
 require 'environment'
 require 'sinatra'
 
@@ -26,12 +30,17 @@ helpers do
   end
 
   def with_valid_feed(f, &b)
-    if f.nil? || f.name.to_s.downcase != params[:name].to_s.downcase
+    if f.nil? || f.title.to_s.downcase != params[:clean_url].to_s.downcase
       not_found
     else
       b.call(f)
     end
   end
+  
+  def host
+    request.host + (":#{request.port}" if request.port)
+  end
+  
 end
 
 get "/" do
@@ -39,14 +48,42 @@ get "/" do
   haml :index
 end
 
-get "/:id/:name" do
-  with_valid_feed(Funnel.get(params[:id])) do |f|
+get "/all" do
+  @funnels = Funnel.all
+  haml :all
+end
+
+get "/:id/:clean_url.:format" do
+  if @funnel = Funnel.get(params[:id])
     content_type "application/rss+xml"
-    f.rss
+    @funnel.rss
+  else
+    not_found
   end
 end
 
-get "/delete/:id/:name" do
+post "/update/:id/:clean_url" do
+  protected!
+  
+  @feed = Funnel.get(params[:id])
+  @feed.title = params[:feed][:title] if params[:feed][:title]
+  @feed.clean_url = params[:feed][:clean_url] if params[:feed][:clean_url]
+  @feed.rss = @feed.refresh(:title => @feed.title)
+  @feed.save
+  @feed = Funnel.get(params[:id])
+  
+  redirect "/all"
+end
+
+get "/edit/:id/:clean_url" do
+  protected!
+
+  @feed = Funnel.get(params[:id])
+
+  haml :edit
+end
+
+get "/delete/:id/:clean_url" do
   protected!
 
   with_valid_feed(Funnel.get(params[:id])) do |f|
@@ -59,10 +96,8 @@ post "/generate" do
   h = {:urls => params["urls"]}
   f = Funnel.first(h) || (Funnel.create(h) rescue nil)
 
-  host = request.host + (":#{request.port}" if request.port)
-
-  if f && !f.rss.to_s.strip.empty? && !f.name.to_s.empty?
-    url = "http://#{host}/#{f.id}/#{f.name}"
+  if f && !f.rss.to_s.strip.empty? && !f.clean_url.to_s.empty?
+    url = "http://#{host}/#{f.id}/#{f.clean_url}.xml"
     request.xhr? ? "#{url}|#{f.url}|#{f.img}" : redirect(url)
   else
     # Get rid of blank submissions

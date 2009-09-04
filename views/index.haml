@@ -1,11 +1,14 @@
-%h1
-  %a{:href => "/"} Combinificator
+%div.header
+  %img.gb{:src => "gb.png"}
 
-%h3 Make a podcast in multiple video formats? Have a separate feed for each format? Not after Combinificator gets involved, you don't.
+  %h1
+    %a{:href => "/"} Combinificator
+
+  %h3 Make a podcast in multiple video formats? Have a separate feed for each format? Not after Combinificator gets involved, you don't.
+
 
 %form{:action => "/generate", :method => "get"}
   %div.textarea
-    %img.gb{:src => "gb.png"}
     %textarea{:name => "urls"}
 
     %p Enter your feed addresses in Box A1 above. One URL per line, please. Press the button and the address of your new, uh, combinified feed will be promptly returned to you.
@@ -20,6 +23,8 @@
 %p= "Updated #{last_refreshed}."
 
 %ul.images= @funnels.map { |f| '<li><a href="'+f.url.to_s+'"><img src="'+f.img+'" height="200px" width="200px" /></a></li>' }.join('')
+
+%p See <a href="/all">our list of combinificated feeds</a>.
 
 %p Combinificator is <a href="http://wiki.limewire.org/index.php?title=LimeCast_Funnel">open source</a>, part of <a href="http://limecast.com">LimeCast</a>,<br /> and wants you to check out <a href="http://getmiro.com/">Miro</a> and <a href="http://makeinternettv.org/">Make Internet TV</a>.
 

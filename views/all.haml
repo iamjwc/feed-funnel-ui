@@ -1,0 +1,21 @@
+%table.feeds
+  %tr
+    %th
+    %th Combined feeds
+    %th
+  - @funnels.each do |f|
+    %tr
+      %td
+        = %{<img src="#{f.img}" height="100px" width="100px" />}
+      %td
+        = %{<a href="http://#{host}/#{f.id}/#{f.clean_url}.xml">#{f.title} (http://#{host}/#{f.id}/#{f.clean_url}.xml)</a>}
+        %ul
+          - f.urls.each do |url|
+            %li
+              = %{<a href="url">#{url}</a>}
+
+%p
+  %a{:href => "/"}Combinificate a feed!
+
+%p Combinificator is <a href="http://wiki.limewire.org/index.php?title=LimeCast_Funnel">open source</a>, part of <a href="http://limecast.com">LimeCast</a>,<br /> and wants you to check out <a href="http://getmiro.com/">Miro</a> and <a href="http://makeinternettv.org/">Make Internet TV</a>.
+

@@ -38,7 +38,7 @@ helpers do
   end
   
   def host
-    request.host + (":#{request.port}" unless [80,0].include?(request.port.inspect))
+    request.host + (":#{request.port}" unless [80,0].include?(request.port.to_i))
   end
   
 end

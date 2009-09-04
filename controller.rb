@@ -38,7 +38,7 @@ helpers do
   end
   
   def host
-    request.host + (":#{request.port}" unless [80].include?(request.port))
+    request.env['HTTP_HOST']
   end
   
 end
@@ -66,8 +66,8 @@ post "/update/:id/:clean_url" do
   protected!
   
   @feed = Funnel.get(params[:id])
-  @feed.title = params[:feed][:title] if params[:feed][:title]
-  @feed.clean_url = params[:feed][:clean_url] if params[:feed][:clean_url]
+  @feed.title = params[:feed][:title].strip if params[:feed][:title]
+  @feed.clean_url = params[:feed][:clean_url].strip if params[:feed][:clean_url]
   @feed.rss = @feed.refresh(:title => @feed.title)
   @feed.save
   @feed = Funnel.get(params[:id])

@@ -85,11 +85,11 @@ end
 
 get "/delete/:id/:clean_url" do
   protected!
+  
+  @feed = Funnel.get(params[:id])
+  @feed.destroy
 
-  with_valid_feed(Funnel.get(params[:id])) do |f|
-    f.destroy
-    redirect '/'
-  end
+  redirect '/'
 end
 
 post "/generate" do
@@ -116,3 +116,6 @@ get "/refresh" do
   redirect '/'
 end
 
+get "/rss" do
+  "dtd"
+end
